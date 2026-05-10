@@ -51,7 +51,7 @@ Dårlig søvn: ${badSleep}`;
 			})
 		});
 
-		if (res.ok) {
+				if (res.ok) {
 			alert('Måling gemt!');
 			bloodSugar = '';
 			medicineTaken = false;
@@ -61,6 +61,20 @@ Dårlig søvn: ${badSleep}`;
 			await loadPosts();
 		} else {
 			alert('Fejl!');
+		}
+	}
+
+	async function deleteEntry(id) {
+		const res = await fetch('/api/diary', {
+			method: 'DELETE',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ id })
+		});
+
+		if (res.ok) {
+			await loadPosts();
+		} else {
+			alert('Kunne ikke slette måling');
 		}
 	}
 
@@ -88,7 +102,7 @@ Dårlig søvn: ${badSleep}`;
 				Jeg har taget min medicin i dag
 			</label>
 
-			<label>Træning / motion</label>
+			<label>Træning</label>
 			<input type="number" bind:value={exerciseMinutes} placeholder="Fx 30 minutter" />
 
 			<h3>Symptomer</h3>
@@ -141,19 +155,27 @@ Dårlig søvn: ${badSleep}`;
 			</div>
 
 			<div class="small-card">
-				<h3>Tidligere målinger</h3>
+	<h3>Tidligere målinger</h3>
 
-				{#each posts.slice(0, 3) as post}
-					<div class="mini-entry">
-						<p><strong>{post.bloodSugar} mmol/L</strong></p>
-						<p>Medicin: {post.medicineTaken === 1 ? 'Ja' : 'Nej'} · {post.exerciseMinutes} min</p>
-						<p>{post.food}</p>
-						<p>{post.content}</p>
-					</div>
-				{/each}
-			</div>
-		</aside>
-	</div>
+	{#each posts.slice(0, 3) as post}
+		<div class="mini-entry">
+			<p><strong>{post.bloodSugar} mmol/L</strong></p>
+			<p><strong>Medicin:</strong> {post.medicineTaken === 1 ? 'Ja' : 'Nej'}</p>
+<p><strong>Motion:</strong> {post.exerciseMinutes} min</p>
+
+			<p><strong>Kost:</strong> {post.food}</p>
+
+			<p><strong>Symptomer:</strong></p>
+			<pre>{post.symptoms}</pre>
+
+			<p><strong>Dagbog:</strong> {post.content}</p>
+
+			<button class="delete-button" onclick={() => deleteEntry(post.id)}>
+				Slet
+			</button>
+		</div>
+	{/each}
+</div>
 
 	<footer>Denne dagbog erstatter ikke professionel rådgivning. Kontakt altid din læge ved bekymring.</footer>
 </main>
@@ -306,9 +328,22 @@ Dårlig søvn: ${badSleep}`;
 }
 
 	footer {
-		text-align: center;
-		margin-top: 35px;
-		color: #667085;
-		font-size: 14px;
-	}
+	text-align: center;
+	margin-top: 35px;
+	color: #667085;
+	font-size: 14px;
+}
+
+pre {
+	white-space: pre-wrap;
+	font-family: Arial, sans-serif;
+	font-size: 13px;
+}
+
+.delete-button {
+	background: #dc2626;
+	margin-top: 10px;
+	padding: 8px 12px;
+	font-size: 13px;
+}
 </style>

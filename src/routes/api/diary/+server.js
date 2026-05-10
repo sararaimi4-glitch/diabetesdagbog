@@ -46,3 +46,15 @@ export async function GET({ locals }) {
 
 	return json(posts);
 }
+
+export async function DELETE({ request, locals }) {
+	if (!locals.user) {
+		return json({ error: 'Unauthorized' }, { status: 401 });
+	}
+
+	const { id } = await request.json();
+
+	await db.delete(diary).where(eq(diary.id, id));
+
+	return json({ success: true });
+}
