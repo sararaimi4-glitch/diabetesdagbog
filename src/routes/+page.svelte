@@ -65,7 +65,7 @@ Dårlig søvn: ${badSleep}`;
 
 <main class="page">
 	<header>
-		<h1>Min Diabetesdagbog 💧</h1>
+		<h1>Min Diabetesdagbog </h1>
 		<p>Registrer dine daglige målinger, symptomer, kost og motion.</p>
 	</header>
 
