@@ -100,7 +100,7 @@ Dårlig søvn: ${badSleep}`;
 			<div class="symptom"><span>🌙 Dårlig søvn</span><input type="range" min="1" max="10" bind:value={badSleep} /><b>{badSleep}</b></div>
 
 			<label>Kost</label>
-			<textarea bind:value={food} placeholder="Beskriv din kost..."></textarea>
+			<textarea bind:value={food} placeholder="Skriv dagens måltider og snacks..."></textarea>
 
 			<label>Dagbog</label>
 			<textarea bind:value={content} placeholder="Skriv dine tanker, noter eller andet..."></textarea>
