@@ -11,7 +11,9 @@ export async function handle({ event, resolve }) {
 	if (token) {
 		try {
 			const decoded = jwt.verify(token, env.JWT_SECRET);
-			event.request.user = decoded;
+
+			event.locals.user = decoded;
+
 			return await resolve(event);
 		} catch (err) {
 			console.error('Token verification failed:', err);

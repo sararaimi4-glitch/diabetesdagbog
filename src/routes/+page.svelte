@@ -19,9 +19,13 @@
 	let posts = $state([]);
 
 	async function loadPosts() {
-		const res = await fetch('/api/diary');
-		posts = await res.json();
-	}
+	const res = await fetch('/api/diary');
+	const data = await res.json();
+
+	console.log('Hentede posts:', data);
+
+	posts = data;
+}
 
 	async function addEntry() {
 		const symptoms = `Tørst: ${thirst}

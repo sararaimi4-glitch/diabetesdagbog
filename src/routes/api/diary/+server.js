@@ -3,8 +3,10 @@ import { diary } from '$lib/server/db/schema';
 import { json } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 
-export async function POST({ request }) {
-	const userId = 1;
+export async function POST({ request, locals }) {
+	if (!locals.user) {
+		return json({ error: 'Unauthorized' }, { status: 401 });
+	}
 
 	const {
 		bloodSugar,
@@ -19,7 +21,7 @@ export async function POST({ request }) {
 	const newPost = await db
 		.insert(diary)
 		.values({
-			userId,
+			userId: locals.user.id,
 			bloodSugar,
 			medicineTaken,
 			insulinReminder,
@@ -33,9 +35,13 @@ export async function POST({ request }) {
 	return json(newPost[0], { status: 201 });
 }
 
-export async function GET() {
+export async function GET({ locals }) {
+	if (!locals.user) {
+		return json({ error: 'Unauthorized' }, { status: 401 });
+	}
+
 	const posts = await db.query.diary.findMany({
-		where: eq(diary.userId, 1)
+		where: eq(diary.userId, locals.user.id)
 	});
 
 	return json(posts);
