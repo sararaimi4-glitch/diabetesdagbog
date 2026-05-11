@@ -9,18 +9,21 @@ export async function handle({ event, resolve }) {
 	}
 
 	if (token) {
-		try {
-			const decoded = jwt.verify(token, env.JWT_SECRET);
+	try {
+		const decoded = jwt.verify(token, env.JWT_SECRET);
 
-			event.locals.user = decoded;
+		event.locals.user = decoded;
 
-			return await resolve(event);
-		} catch (err) {
-			console.error('Token verification failed:', err);
-		}
+		return await resolve(event);
+	} catch (err) {
+		console.error('Token verification failed:', err);
 	}
-
-	return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-		status: 401
-	});
 }
+
+if (event.url.pathname !== '/login') {
+	return Response.redirect(new URL('/login', event.url), 303);
+}
+
+return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+	status: 401
+});
